@@ -15,7 +15,7 @@ import java.io.IOException
 @Service
 class UploadFileServiceImpl: IUploadFileService {
 
-    private val uploadFile = "/opt/wildfly/standalone/data/uploads/springboot/"
+    private val uploadFile = "/opt/wildfly/standalone/data/uploads/springboot"
 
     override fun uploadFile(fileName: String, file: String): Resource {
         var rutaAnterior = getPath(fileName , file)
