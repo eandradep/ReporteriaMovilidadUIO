@@ -31,6 +31,7 @@ class UploadFileServiceImpl: IUploadFileService {
     @Throws(IOException::class)
     @Transactional
     override fun copyFile(fileReport: MultipartFile, file: String): String {
+        print(uploadFile)
         val fileName = UUID.randomUUID().toString() + "_" + fileReport.originalFilename!!.replace(" ", "")
         val fileDir = Paths.get("$uploadFile/$file").resolve(fileName).toAbsolutePath()
         Files.copy(fileReport.inputStream, fileDir)
