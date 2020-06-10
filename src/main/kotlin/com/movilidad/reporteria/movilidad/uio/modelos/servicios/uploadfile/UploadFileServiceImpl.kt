@@ -16,7 +16,7 @@ import java.io.IOException
 class UploadFileServiceImpl: IUploadFileService {
 
     private val uploadFile = (File (".").absolutePath)
-            .subSequence(0, (File (".").absolutePath).length)
+            .subSequence(0, (File (".").absolutePath).length-1)
 
     override fun uploadFile(fileName: String, file: String): Resource {
         var rutaAnterior = getPath(fileName , file)
