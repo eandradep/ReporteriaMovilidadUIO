@@ -18,4 +18,6 @@ interface IUploadFileService {
 
     fun getPath(fileName: String, file: String): Path
 
+//    private fun getURLMediaConfiguration():String
+
 }
