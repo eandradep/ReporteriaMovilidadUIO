@@ -1,6 +1,6 @@
 package com.movilidad.reporteria.movilidad.uio.controlador
 
-import com.movilidad.reporteria.movilidad.uio.modelos.servicios.uploadfile.IUploadFileService
+import com.movilidad.reporteria.movilidad.uio.models.services.uploadfile.IUploadFileService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/api/upload")
-class UploadFile {
+class UploadFileController {
 
     @Autowired
     private val uploadService: IUploadFileService? = null

@@ -1,4 +1,4 @@
-package com.movilidad.reporteria.movilidad.uio.modelos.servicios.uploadfile
+package com.movilidad.reporteria.movilidad.uio.models.services.uploadfile
 
 import org.springframework.web.multipart.MultipartFile
 import java.io.IOException
