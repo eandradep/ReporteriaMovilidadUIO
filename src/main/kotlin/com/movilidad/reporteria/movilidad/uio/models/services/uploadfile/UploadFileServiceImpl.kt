@@ -21,7 +21,7 @@ class UploadFileServiceImpl: IUploadFileService {
         var rutaAnterior = getPath(fileName , file)
         var recursoUrl: Resource = UrlResource(rutaAnterior.toUri())
         if (!recursoUrl.exists() && !recursoUrl.isReadable) {
-            rutaAnterior = Paths.get("src/main/resources/static/image").resolve("nouser.jpg").toAbsolutePath()
+            rutaAnterior = Paths.get("/opt/wildfly/standalone/data/private").resolve("nouser.jpg").toAbsolutePath()
             recursoUrl = UrlResource(rutaAnterior.toUri())
         }
         return recursoUrl
@@ -57,8 +57,8 @@ class UploadFileServiceImpl: IUploadFileService {
 
     private fun getURLMediaConfiguration(): String {
         val prop = Properties()
-        val propFileName = "/opt/wildfly/standalone/data/private/general.properties"
-//        val propFileName = "/home/edisonandrade/Documents/Servidores/wld-fnl/standalone/data/private/general.properties"
+//        val propFileName = "/opt/wildfly/standalone/data/private/general.properties"
+        val propFileName = "/home/edisonandrade/Documents/Servidores/wld-fnl/standalone/data/private/general.properties"
         val mediaPath :String
         val inputStream: InputStream? =  FileInputStream(propFileName);
         if (inputStream != null) {
