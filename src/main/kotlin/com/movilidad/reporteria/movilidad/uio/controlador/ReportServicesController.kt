@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/reporteria")
 class ReportServicesController {
     @Autowired
-    private val uploadService: IReportService? = null
+    private val iReportService: IReportService? = null
 
 //    OBTENER LOS SECTORES QUE ESTAN EN USO
 
@@ -19,7 +19,7 @@ class ReportServicesController {
     fun getUseSectors(): Any {
         val response = HashMap<String, Any>()
         try {
-            val sectorUseDTOList = uploadService!!.getUseSectors()
+            val sectorUseDTOList = iReportService!!.getUseSectors()
             return if (sectorUseDTOList!!.isEmpty()){
                 response["mensaje"] = "DATOS NO ENCONTRADOS"
                 response["resultado"] = listOf<Any>()
@@ -42,7 +42,7 @@ class ReportServicesController {
     fun getReportSector(@PathVariable idSec: Int ): Any {
         val response = HashMap<String, Any>()
         try {
-            val reportSectorDTOList = uploadService!!.getReportSector(idSec)
+            val reportSectorDTOList = iReportService!!.getReportSector(idSec)
             return if (reportSectorDTOList!!.isEmpty()){
                 response["mensaje"] = "DATOS NO ENCONTRADOS"
                 response["resultado"] = listOf<Any>()
@@ -66,7 +66,7 @@ class ReportServicesController {
     fun getReportDep(@PathVariable dep: String ): Any {
         val response = HashMap<String, Any>()
         try {
-            val reportDepDTOList = uploadService!!.getReportDepDTO(dep)
+            val reportDepDTOList = iReportService!!.getReportDepDTO(dep)
             return if (reportDepDTOList!!.isEmpty()){
                 response["mensaje"] = "DATOS NO ENCONTRADOS"
                 response["resultado"] = listOf<Any>()
@@ -88,7 +88,7 @@ class ReportServicesController {
     fun getReportGen( ): Any {
         val response = HashMap<String, Any>()
         try {
-            val reportDepDTOList = uploadService!!.getReportGen()
+            val reportDepDTOList = iReportService!!.getReportGen()
             return if (reportDepDTOList!!.isEmpty()){
                 response["mensaje"] = "DATOS NO ENCONTRADOS"
                 response["resultado"] = listOf<Any>()
@@ -104,6 +104,68 @@ class ReportServicesController {
             return ResponseEntity<Map<*, *>>(response, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
+
+//  MIGRADOS POR FECHA
+    @GetMapping("/getReportShapes/{initDate}/{endDate}/{figureType}")
+    fun getReportShapes( @PathVariable initDate: String, // Fecha Inicial
+                         @PathVariable endDate: String,  // Fecha Final
+                         @PathVariable figureType: Int): Any // Historido Shape = 1, Historico Parada = 2
+    {
+        val response = HashMap<String, Any>()
+        try {
+            val reportShapeStopDTOList = if (figureType == 1){
+                iReportService!!.getReportShapes(initDate.replace("-","/"),
+                        endDate.replace("-","/"))
+            } else {
+                iReportService!!.getReportStops(initDate.replace("-","/"),
+                        endDate.replace("-","/"))
+            }
+
+            return if (reportShapeStopDTOList!!.isEmpty()){
+                response["mensaje"] = "DATOS NO ENCONTRADOS"
+                response["resultado"] = listOf<Any>()
+                ResponseEntity<Map<String, Any>>(response, HttpStatus.NOT_FOUND)
+            } else {
+                response["mensaje"] = "DATOS ENCONTRADOS"
+                response["resultado"] = reportShapeStopDTOList
+                ResponseEntity<Map<String, Any>>(response, HttpStatus.OK)
+            }
+        } catch (e: DataAccessException){
+            response["mensaje"] = "ERROR EN EL SERVIDOR"
+            response["error"] = "${e.mostSpecificCause.message}"
+            return ResponseEntity<Map<*, *>>(response, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    //  MIGRADOS POR FECHA
+    @GetMapping("/getNotHistoric/{initDate}/{endDate}")
+    fun getNotHistoric( @PathVariable initDate: String, // Fecha Inicial
+                         @PathVariable endDate: String  // Fecha Final
+                         ): Any
+    {
+        val response = HashMap<String, Any>()
+        try {
+            val notHistoricDTOList = iReportService!!.getNotHistoric(
+                    initDate.replace("-","/"),
+                    endDate.replace("-","/"))
+
+            return if (notHistoricDTOList!!.isEmpty()){
+                response["mensaje"] = "DATOS NO ENCONTRADOS"
+                response["resultado"] = listOf<Any>()
+                ResponseEntity<Map<String, Any>>(response, HttpStatus.NOT_FOUND)
+            } else {
+                response["mensaje"] = "DATOS ENCONTRADOS"
+                response["resultado"] = notHistoricDTOList
+                ResponseEntity<Map<String, Any>>(response, HttpStatus.OK)
+            }
+        } catch (e: DataAccessException){
+            response["mensaje"] = "ERROR EN EL SERVIDOR"
+            response["error"] = "${e.mostSpecificCause.message}"
+            return ResponseEntity<Map<*, *>>(response, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+
 
 
 }

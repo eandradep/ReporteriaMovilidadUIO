@@ -1,8 +1,6 @@
 package com.movilidad.reporteria.movilidad.uio.models.services.report
 
-import com.movilidad.reporteria.movilidad.uio.models.dto.ReportDepDTO
-import com.movilidad.reporteria.movilidad.uio.models.dto.ReportSectorDTO
-import com.movilidad.reporteria.movilidad.uio.models.dto.SectorUseDTO
+import com.movilidad.reporteria.movilidad.uio.models.dto.*
 import java.net.MalformedURLException
 
 interface IReportService {
@@ -18,5 +16,14 @@ interface IReportService {
 
     @Throws(MalformedURLException::class)
     fun getReportGen(): List<ReportDepDTO>?
+
+    @Throws(MalformedURLException::class)
+    fun getReportStops(initDate: String, endDate: String): List<ReportShapeStopDTO>?
+
+    @Throws(MalformedURLException::class)
+    fun getReportShapes(initDate: String, endDate: String): List<ReportShapeStopDTO>?
+
+    @Throws(MalformedURLException::class)
+    fun getNotHistoric(initDate: String, endDate: String): List<NotHistoricDTO>?
 
 }

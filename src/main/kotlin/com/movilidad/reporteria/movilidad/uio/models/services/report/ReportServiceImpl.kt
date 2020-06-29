@@ -1,9 +1,7 @@
 package com.movilidad.reporteria.movilidad.uio.models.services.report
 
 import com.movilidad.reporteria.movilidad.uio.models.dao.IReportDao
-import com.movilidad.reporteria.movilidad.uio.models.dto.ReportDepDTO
-import com.movilidad.reporteria.movilidad.uio.models.dto.ReportSectorDTO
-import com.movilidad.reporteria.movilidad.uio.models.dto.SectorUseDTO
+import com.movilidad.reporteria.movilidad.uio.models.dto.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
@@ -85,5 +83,53 @@ class ReportServiceImpl : IReportService {
             reportDepDTOList.add(reportDepDTO)
         }
         return reportDepDTOList
+    }
+
+    @Transactional(readOnly = true)
+    override fun getReportStops(initDate: String, endDate: String): List<ReportShapeStopDTO>? {
+        val reportShapeStopDTOList = arrayListOf<ReportShapeStopDTO>()
+        for ( objectResult in reportDao!!.getReportStops(initDate, endDate)!!) {
+            reportShapeStopDTOList.add(this.getReportShapeStopDTO(objectResult))
+        }
+        return reportShapeStopDTOList
+    }
+
+    @Transactional(readOnly = true)
+    override fun getReportShapes(initDate: String, endDate: String): List<ReportShapeStopDTO>? {
+        val reportShapeStopDTOList = arrayListOf<ReportShapeStopDTO>()
+        for ( objectResult in reportDao!!.getReportShapes(initDate, endDate)!!) {
+            reportShapeStopDTOList.add(this.getReportShapeStopDTO(objectResult))
+        }
+        return reportShapeStopDTOList
+    }
+
+    @Transactional(readOnly = true)
+    override fun getNotHistoric(initDate: String, endDate: String): List<NotHistoricDTO>? {
+        val notHistoricDTOList = arrayListOf<NotHistoricDTO>()
+        for ( objectResult in reportDao!!.getNotHistoric(initDate, endDate)!!) {
+            val notHistoricDTO = NotHistoricDTO()
+            notHistoricDTO.userID = objectResult[0] as String
+            notHistoricDTO.userName = objectResult[1] as String
+            notHistoricDTO.userPhone = objectResult[2] as String
+            notHistoricDTO.userEmail = objectResult[3] as String
+            notHistoricDTO.reportInfo = objectResult[4] as String
+            notHistoricDTO.notID = objectResult[5] as Int
+            notHistoricDTO.notDate = objectResult[6] as String
+            notHistoricDTO.notFileAdd = objectResult[7] as Boolean
+            notHistoricDTO.notMailStatus = objectResult[8] as Boolean
+            notHistoricDTO.notStatus = objectResult[9] as Boolean
+            notHistoricDTO.notMessage = objectResult[10] as String
+            notHistoricDTOList.add(notHistoricDTO)
+        }
+        return notHistoricDTOList
+    }
+
+    private fun getReportShapeStopDTO (objectResult: Array<Any>) : ReportShapeStopDTO{
+        val reportShapeStopDTO = ReportShapeStopDTO()
+        reportShapeStopDTO.shapeId = objectResult[0] as Int
+        reportShapeStopDTO.shapeDescriptor = objectResult[1] as String
+        reportShapeStopDTO.shapeDate = objectResult[2] as String
+        reportShapeStopDTO.shapesCount = objectResult[3] as Int
+        return reportShapeStopDTO;
     }
 }
