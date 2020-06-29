@@ -5,6 +5,9 @@ import com.movilidad.reporteria.movilidad.uio.models.dto.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
+import java.io.FileInputStream
+import java.io.InputStream
+import java.util.*
 
 @Service
 class ReportServiceImpl : IReportService {
@@ -119,6 +122,8 @@ class ReportServiceImpl : IReportService {
             notHistoricDTO.notMailStatus = objectResult[8] as Boolean
             notHistoricDTO.notStatus = objectResult[9] as Boolean
             notHistoricDTO.notMessage = objectResult[10] as String
+            val concat = "http://${getURLMediaConfiguration()}:8000/api/upload/get/${objectResult[11] as String}"
+            notHistoricDTO.urlImagen = concat
             notHistoricDTOList.add(notHistoricDTO)
         }
         return notHistoricDTOList
@@ -132,4 +137,23 @@ class ReportServiceImpl : IReportService {
         reportShapeStopDTO.shapesCount = objectResult[3] as Int
         return reportShapeStopDTO;
     }
+
+    private fun getURLMediaConfiguration(): String {
+        val prop = Properties()
+        val propFileName = "/opt/wildfly/standalone/data/private/general.properties"
+//        val propFileName = "/home/edisonandrade/Documents/Servidores/wld-fnl/standalone/data/private/general.properties"
+        val mediaPath :String
+        val inputStream: InputStream? =  FileInputStream(propFileName);
+        if (inputStream != null) {
+            prop.load(inputStream)
+            mediaPath = prop.getProperty("ip.server")
+            if (mediaPath.isEmpty()){
+                return "/opt/wildfly/standalone/data/uploads/springboot/"
+            }
+        } else {
+            return "/opt/wildfly/standalone/data/uploads/springboot/"
+        }
+        return mediaPath
+    }
+
 }

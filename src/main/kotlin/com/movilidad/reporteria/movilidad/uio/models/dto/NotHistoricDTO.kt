@@ -25,5 +25,7 @@ class NotHistoricDTO : Serializable{
     var notStatus: Boolean = false
 
     var notMessage: String = ""
+
+    var urlImagen: String = ""
     
 }

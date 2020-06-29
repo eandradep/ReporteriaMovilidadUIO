@@ -108,7 +108,8 @@ interface IReportDao : JpaRepository<HistoricReport, Long>{
             "        nu.archivo_adjunto,\n" +
             "        nu.estado_email,\n" +
             "        nu.estado_notificacion,\n" +
-            "        nu.mensaje\n" +
+            "        nu.mensaje,\n" +
+            "        ur.url_archivo_respaldo \n" +
             "from    notificaciones_usuario nu,\n" +
             "        user_report ur,\n" +
             "        usuario_cli uc\n" +
