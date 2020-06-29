@@ -58,6 +58,7 @@ class UploadFileServiceImpl: IUploadFileService {
     private fun getURLMediaConfiguration(): String {
         val prop = Properties()
         val propFileName = "/opt/wildfly/standalone/data/private/general.properties"
+//        val propFileName = "/home/edisonandrade/Documents/Servidores/wld-fnl/standalone/data/private/general.properties"
         val mediaPath :String
         val inputStream: InputStream? =  FileInputStream(propFileName);
         if (inputStream != null) {
