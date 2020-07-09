@@ -25,8 +25,8 @@ class GtfsRealTime {
     /**
      * Metodo Usado para poder Obtener la IMagen del Usario
      * */
-    @GetMapping("/getFile/{fileName:.+}")
-    fun verVideo(@PathVariable fileName: String): Any{
+    @GetMapping("/getFile")
+    fun verVideo(): Any{
         var recurso: Resource? = null
         val response = HashMap<String, Any>()
         try {
