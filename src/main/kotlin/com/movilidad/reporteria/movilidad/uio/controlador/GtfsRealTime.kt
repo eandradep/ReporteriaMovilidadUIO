@@ -1,75 +1,49 @@
 package com.movilidad.reporteria.movilidad.uio.controlador
 
-import com.movilidad.reporteria.movilidad.uio.models.dto.realtime.*
-import org.springframework.dao.DataAccessException
+
+
+import com.movilidad.reporteria.movilidad.uio.models.services.gtfsrealtime.IGtfsRealTimeService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.io.Resource
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.net.MalformedURLException
+
 
 @RestController
 @RequestMapping("/api/gtfs")
 class GtfsRealTime {
 
+    @Autowired
+    private val iGtfsRealTimeService: IGtfsRealTimeService? = null
 
-    @GetMapping("/getgts")
-    fun getUseSectors(): Any {
+    /**
+     * Metodo Usado para poder Obtener la IMagen del Usario
+     * */
+    @GetMapping("/getFile")
+    fun verVideo(): Any{
+        var recurso: Resource? = null
         val response = HashMap<String, Any>()
-
-        val feedMessageList: FeedMessage = FeedMessage()
-
-        val header: Header = Header()
-        header.gtfs_realtime_version = "2.0"
-        header.incrementality = "FULL_DATASET"
-        header.timestamp = 1284457468
-
-
-
-        val entityList = arrayListOf<Entity>()
-
-
-        entityList.add(getEntity())
-        entityList.add(getEntity())
-        entityList.add(getEntity())
-
-
-        feedMessageList.header = header
-        feedMessageList.entityList = entityList
-
-
-
-        response["mensaje"] = "DATOS ENCONTRADOS"
-        response["resultado"] = feedMessageList
-        ResponseEntity<Map<String, Any>>(response, HttpStatus.OK)
-
-        return response;
-
+        try {
+            try{
+                iGtfsRealTimeService!!.generateGtfsFile()
+            } catch (e: Exception){
+                response["mensaje"]="Error al intenar subir la Imagen"
+                response["error"] = "${e.message} : ${e.cause!!.message}"
+                return ResponseEntity<Map<String, Any>>(response, HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+            recurso = iGtfsRealTimeService.uploadFile()
+        } catch (e: MalformedURLException) {
+            e.printStackTrace()
+        }
+        val httpHeaders = HttpHeaders()
+        httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso!!.filename + "\"")
+        return ResponseEntity(recurso, httpHeaders, HttpStatus.OK)
     }
 
-    fun getEntity(): Entity {
-        val entity = Entity()
-        entity.id = "IDENTIFICADOR UNICO"
-        val vehiclePosition = VehiclePosition()
-
-        val position = Position()
-        position.latitude = -75.684213F
-        position.longitude = -75.684213F
-
-
-        val vehicle = Vehicle()
-
-        vehicle.id = "123"
-        vehicle.label = "BUS DE JUANITO"
-        vehicle.license_plate = "HU786Q"
-
-        vehiclePosition.trip = "TRIP DE LA BD"
-        vehiclePosition.position = position
-        vehiclePosition.vehicle = vehicle
-
-        entity.vehiclePosition = vehiclePosition
-
-        return entity
-    }
 
 }
