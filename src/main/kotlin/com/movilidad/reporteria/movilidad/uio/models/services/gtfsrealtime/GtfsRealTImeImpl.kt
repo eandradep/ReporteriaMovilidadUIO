@@ -11,8 +11,8 @@ import java.nio.file.Paths
 @Service
 class GtfsRealTImeImpl: IGtfsRealTimeService {
 
-//    private val urlFinalPath = "/opt/wildfly/standalone/data/private"
-    private var urlFinalPath = "/home/edisonandrade/Documents/Servidores/wld-fnl/standalone/data/private"
+    private val urlFinalPath = "/opt/wildfly/standalone/data/private"
+//    private var urlFinalPath = "/home/edisonandrade/Documents/Servidores/wld-fnl/standalone/data/private"
     private var fileName = "fileGenerated.pb"
 
     override fun uploadFile(): Resource {
