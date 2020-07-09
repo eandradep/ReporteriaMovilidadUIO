@@ -11,8 +11,8 @@ import java.nio.file.Paths
 @Service
 class GtfsRealTImeImpl: IGtfsRealTimeService {
 
-    private val urlFinalPath = "/opt/wildfly/standalone/data/private"
-//    private var urlFinalPath = "/home/edisonandrade/Documents/Servidores/wld-fnl/standalone/data/private"
+//    private val urlFinalPath = "/opt/wildfly/standalone/data/private"
+    private var urlFinalPath = "/home/edisonandrade/Documents/Servidores/wld-fnl/standalone/data/private"
     private var fileName = "fileGenerated.pb"
 
     override fun uploadFile(): Resource {
@@ -22,41 +22,44 @@ class GtfsRealTImeImpl: IGtfsRealTimeService {
 
     override fun generateGtfsFile() {
         val feedMessage = GtfsRealTime.FeedMessage.newBuilder()
-                .setFeedheader(
-                        GtfsRealTime.FeedMessage.FeedHeader.newBuilder()
+                .setHeader(
+                        GtfsRealTime.FeedHeader.newBuilder()
                                 .setGtfsRealtimeVersion("1.0.0.0")
-                                .setIncrementality(GtfsRealTime.FeedMessage.FeedHeader.Incrementality.FULL_DATASET)
+                                .setIncrementality(GtfsRealTime.FeedHeader.Incrementality.FULL_DATASET)
                                 .setTimestamp(111321L)
                 )
-        for (i in 1..4) {
+
+        for (i in 1..4){
             feedMessage.addEntity(
-                    GtfsRealTime.FeedMessage.FeedEntity.newBuilder()
-                            .setId("asdasd13")
+                    GtfsRealTime.FeedEntity.newBuilder()
+                            .setId("asdasdasdasd")
                             .setVehicle(
-                                    GtfsRealTime.FeedMessage.FeedEntity.VehiclePosition.newBuilder()
+                                    GtfsRealTime.VehiclePosition.newBuilder()
                                             .setTrip(
-                                                    GtfsRealTime.FeedMessage.FeedEntity.VehiclePosition.TripDescriptor.newBuilder()
-                                                            .setTripId("123456")
-                                                            .setRouteId("132456")
-                                                            .setStartTime("19:00:00")
-                                                            .setStartDate("20200708")
+                                                    GtfsRealTime.TripDescriptor.newBuilder()
+                                                            .setTripId("132132")
+                                                            .setRouteId("231321")
+                                                            .build()
+                                            )
+                                            .setVehicle(
+                                                    GtfsRealTime.VehicleDescriptor.newBuilder()
+                                                            .setId("asdasdasd")
+                                                            .setLabel("65as4da65sd4")
+                                                            .setLicensePlate("654sad6a5s4d")
+                                                            .build()
                                             )
                                             .setPosition(
-                                                    GtfsRealTime.FeedMessage.FeedEntity.VehiclePosition.Position.newBuilder()
-                                                            .setLatitude(42.46401f)
-                                                            .setLongitude(-70.94477f)
-                                                            .setBearing(288.0f)
+                                                    GtfsRealTime.Position.newBuilder()
+                                                            .setLatitude("132".toFloat())
+                                                            .setLongitude("-36.58".toFloat())
+                                                            .setBearing("23".toFloat())
+                                                            .build()
                                             )
                                             .setCurrentStopSequence(3)
-                                            .setCurrentStatus(GtfsRealTime.FeedMessage.FeedEntity.VehiclePosition.VehicleStopStatus.IN_TRANSIT_TO)
-                                            .setTimestamp(1594249332)
-                                            .setStopId("7240")
-                                            .setVehicle(
-                                                    GtfsRealTime.FeedMessage.FeedEntity.VehiclePosition.VehicleDescriptor.newBuilder()
-                                                            .setId("y0771")
-                                                            .setLabel("0771")
-                                                            .setLicensePlate("6546654")
-                                            )
+                                            .setStopId("1")
+                                            .setTimestamp(1231654L)
+
+                                            .build()
                             )
             )
         }
