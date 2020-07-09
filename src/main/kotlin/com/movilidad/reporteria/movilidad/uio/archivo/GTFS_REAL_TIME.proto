@@ -1,0 +1,66 @@
+syntax = "proto2";
+
+package realtime;
+
+option java_package = "com.movilidad.reporteria.movilidad.uio.gtfs";
+option java_outer_classname = "GtfsRealTime";
+
+message FeedMessage {
+
+  required FeedHeader feedheader = 1;
+  repeated FeedEntity entity = 2;
+
+  message FeedHeader {
+
+    required string gtfs_realtime_version = 1;
+    optional Incrementality incrementality = 2 [default = FULL_DATASET];
+    required uint64 timestamp = 3;
+
+    enum Incrementality {
+      FULL_DATASET = 0;
+      DIFFERENTIAL = 1;
+    }
+  }
+
+  message FeedEntity{
+    required string id = 1;
+    required VehiclePosition vehicle = 2;
+
+    message VehiclePosition{
+      optional TripDescriptor trip = 1;
+      optional Position position = 2;
+      optional uint32 current_stop_sequence = 3;
+      optional VehicleStopStatus current_status = 4 [default = IN_TRANSIT_TO];
+      optional uint64 timestamp = 5;
+      optional string stop_id = 6;
+      optional VehicleDescriptor vehicle = 7;
+
+      message TripDescriptor{
+        optional string trip_id = 1;
+        optional string route_id = 2;
+        optional string start_time = 3;
+        optional string start_date = 4;
+      }
+
+      message VehicleDescriptor{
+        optional string id = 1;
+        optional string label = 2;
+        optional string license_plate = 3;
+      }
+
+      message Position{
+        required float latitude = 1;
+        required float longitude = 2;
+        optional float bearing = 3;
+      }
+
+      enum VehicleStopStatus {
+        INCOMING_AT = 0;
+        STOPPED_AT = 1;
+        IN_TRANSIT_TO = 2;
+      }
+    }
+  }
+
+}
+

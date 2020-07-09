@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.net.MalformedURLException
@@ -24,8 +25,8 @@ class GtfsRealTime {
     /**
      * Metodo Usado para poder Obtener la IMagen del Usario
      * */
-    @GetMapping("/getFile")
-    fun verVideo(): Any{
+    @GetMapping("/getFile/{fileName:.+}")
+    fun verVideo(@PathVariable fileName: String): Any{
         var recurso: Resource? = null
         val response = HashMap<String, Any>()
         try {
